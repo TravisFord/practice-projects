@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Javascript Matching Game</title>
+	<style type="text/css">
+		img{
+			position:absolute;
+		}
+		div{
+			position: absolute;
+			width: 500px;
+			height: 500px;
+		}
+		#rightSide {
+			 left: 500px; 
+             border-left: 1px solid black }
+	</style>
+</head>
+<body onload="generateFaces()">
+	<h1>Matching Game</h1>
+	<p>Click on the extra smiling face on the left.</p>
+	<div id="leftSide"></div>
+	<div id="rightSide"></div>
+	<script type="text/javascript">
+		var numberOfFaces = 5;
+		var theLeftSide = document.getElementById("leftSide");
+		var theRightSide = document.getElementById("rightSide");
+		var theBody = document.getElementsByTagName("body")[0];
+		var levelCount = 1;
+
+		// generates 5 random faces on left side
+		function generateFaces(){
+			for(var i =0; i < numberOfFaces; i++){
+				var img = document.createElement("img");
+				img.setAttribute("src","http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png");
+				var randomTop = Math.random() * 400;
+				var randomLeft = Math.random() * 400;
+       			randomTop = Math.floor(randomTop);
+       			randomLeft = Math.floor(randomLeft);
+       			img.style.top = randomTop + "px";
+        		img.style.left = randomLeft + "px";
+        		theLeftSide.appendChild(img);	 
+			}
+			// clones the 5 random faces on right side
+			 var leftSideImages = theLeftSide.cloneNode(true);
+			 leftSideImages.removeChild(leftSideImages.lastChild);
+			 theRightSide.appendChild(leftSideImages);
+
+
+			 // when you click on the extra face on the left side, a new level starts
+			 theLeftSide.lastChild.onclick = function nextLevel(event){
+       			 event.stopPropagation();
+
+       			 while(theLeftSide.firstChild){
+       			 	theLeftSide.removeChild(theLeftSide.firstChild);
+       			 }
+
+       			 while(theRightSide.firstChild){
+       			 	theRightSide.removeChild(theRightSide.firstChild);
+       			 }
+
+        		numberOfFaces += 5;
+        		levelCount++;
+        		generateFaces();	
+			}
+		}
+				// when you click on a wrong face or anywhere in the body, the game is over
+			theBody.onclick = function gameOver(event) {
+				 numberOfFaces = 5;
+				
+   				 alert("Game Over\n\nYou made it to level " + levelCount + "! \nWell Done!\n\nYou can restart from level 1");
+   			     event.stopPropagation();
+				
+  			 	 while(theLeftSide.firstChild){
+       			 	theLeftSide.removeChild(theLeftSide.firstChild);
+       			 }
+
+       			 while(theRightSide.firstChild){
+       			 	theRightSide.removeChild(theRightSide.firstChild);
+       			 }
+  			  	generateFaces();
+  			  	 levelCount = 1;
+			} 
+
+	</script>
+</body>
+</html>
